@@ -17,34 +17,38 @@ public class Decoder {
 
 
     public Decoder(FileReader file) throws IOException{
-        BufferedReader reader = new BufferedReader(file);
-        readAttributes(reader.readLine());
-        readAlphabet(reader.readLine());
+        try {
+            BufferedReader reader = new BufferedReader(file);
+            readAttributes(reader.readLine());
+            readAlphabet(reader.readLine());
 
-        //Reading the matrix bruh
-        puzzle = new char[puzzleSize][puzzleSize];
-        for(int i = 0 ; i < puzzleSize; i++){
-            readMatrixRow(reader.readLine(), i);
+            //Reading the matrix bruh
+            puzzle = new char[puzzleSize][puzzleSize];
+            for (int i = 0; i < puzzleSize; i++) {
+                readMatrixRow(reader.readLine(), i);
+            }
+
+            //Reading the input strings
+            strings = new ArrayList<>();
+            for (int i = 0; i < numberOfStrings; i++) {
+                strings.add(reader.readLine());
+            }
+
+        }catch(Throwable e){
+            System.out.println("NO");
         }
-
-        //Reading the input strings
-        strings = new ArrayList<>();
-        String line;
+        /* LEGACY CODE
         while ((line = reader.readLine()) != null) {
             strings.add(line);
-        }
+        }*/
+        System.out.println("YES");
     }
 
 
     private void readMatrixRow(String s, int row){
         String[] col = s.split(";");
         for(int i = 0 ; i < puzzleSize; i++){
-            try{
-                puzzle[row][i] = col[i].charAt(0);
-            }catch(Throwable e){
-                System.out.println("Something wrong with the matrix input. \n" + e );
-                System.exit(-1);
-            }
+            puzzle[row][i] = col[i].charAt(0);
         }
     }
 
@@ -53,25 +57,15 @@ public class Decoder {
         alphabet = new char[alphabetSize];
 
         for(int i = 0 ; i < alphabetSize; i++){
-            try{
-                alphabet[i] = temp[i].charAt(0);
-            }catch(Throwable e){
-                System.out.println("Line 2 has wrong format. Shutting down \n" + e );
-                System.exit(-1);
-            }
+            alphabet[i] = temp[i].charAt(0);
         }
     }
 
     private void readAttributes(String s){
         String[] temp = s.split(";");
-        try{
-            alphabetSize = Integer.parseInt(temp[0]);
-            numberOfStrings = Integer.parseInt(temp[1]);
-            puzzleSize = Integer.parseInt(temp[2]);
-        }catch(Throwable e){
-            System.out.println("Line 1 has wrong format. Shutting down\n" + e);
-            System.exit(-1);
-        }
+        alphabetSize = Integer.parseInt(temp[0]);
+        numberOfStrings = Integer.parseInt(temp[1]);
+        puzzleSize = Integer.parseInt(temp[2]);
     }
 
     public char[] getAlphabet() {

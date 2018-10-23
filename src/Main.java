@@ -12,7 +12,6 @@ public class Main {
         try{
             FileReader file = new FileReader(filepath);
             Decoder input = new Decoder(file);
-            Helper.printMatrix(input.getPuzzle());
         }catch (IOException e){
             System.out.println("File with path: '" + filepath  + "' could not be found.\n\n" + e);
         }
