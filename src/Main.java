@@ -7,7 +7,7 @@ public class Main {
     public static void main(String [ ] args)
     {
         String directory = System.getProperty("user.dir") + "/src/CPCFiles/";
-        String filepath = directory + "test01.CPC";
+        String filepath = directory + "test02.CPC";
 
         try{
             FileReader file = new FileReader(filepath);

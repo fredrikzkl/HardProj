@@ -111,11 +111,7 @@ public class Decoder {
                         for (int k = 1; k <= wordLength; k++) {
                             solution[row][column - k] = word.charAt(word.length() - k);
                         }
-                    }
-
-                    int offendingColumn = checkHorizontal(row + 1,
-                            column - 1, wordLength);
-                    if (!wordLeft || offendingColumn != -1) {
+                    } else {
                         for (int i = 0; i <= puzzleSize; i++) {
                             wordInfo.remove(new Coordinate(row, i));
                         }
@@ -124,6 +120,14 @@ public class Decoder {
                             return false;
                         }
                         break;
+                    }
+
+                    int offendingColumn = checkHorizontal(row + 1,
+                            column - 1, wordLength);
+                    if (offendingColumn != -1) {
+                        wordInfo.put(coordinate, info);
+                        column--;
+                        continue;
                     }
 
                     wordInfo.put(coordinate, info);
