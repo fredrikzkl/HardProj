@@ -1,10 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 class Decoder {
     private int alphabetSize;
@@ -13,7 +10,9 @@ class Decoder {
 
     private Set<Character> alphabet;
     private char[][] puzzle;
-    private List<String> strings;
+    private String[][] strings;
+    private LinkedHashSet<String> stringSet;
+    private TrieNode prefixTrie;
 
     Decoder(InputStreamReader file) throws Exception{
         BufferedReader reader = new BufferedReader(file);
@@ -25,12 +24,39 @@ class Decoder {
     }
 
     private void readStrings(BufferedReader reader) throws IOException {
-        strings = new ArrayList<>();
+        stringSet = new LinkedHashSet<>();
+        strings = new String[puzzleSize][numberOfStrings];
+        prefixTrie = new TrieNode(new LinkedHashMap<>());
         for (int i = 0; i < numberOfStrings; i++) {
             String word = reader.readLine();
             if (word == null) throw new IllegalArgumentException("Wrong number of strings");
             if (!checkStringInAlphabet(word)) throw new IllegalArgumentException("String not in alphabet");
-            strings.add(word);
+            if (stringSet.add(word)) {
+                int index = word.length() - 1;
+                for (int j = 0; j < strings[index].length; j++) {
+                    if (strings[index][j] == null) {
+                        strings[index][j] = word;
+                        break;
+                    }
+                }
+                prefixTrie.insertString(word);
+            }
+        }
+
+        Integer[] sizes = new Integer[puzzleSize];
+        for (int i = 0; i < puzzleSize; i++) {
+            int size = 0;
+            for (String string : strings[i]) {
+                if (string == null) break;
+                size++;
+            }
+            sizes[i] = size;
+        }
+
+        for (int i = 0; i < puzzleSize; i++) {
+            String[] newArray = new String[sizes[i]];
+            System.arraycopy(strings[i], 0, newArray, 0, sizes[i]);
+            strings[i] = newArray;
         }
         if (reader.readLine() != null) throw new IllegalArgumentException("Wrong number of strings");
     }
@@ -87,7 +113,15 @@ class Decoder {
         return puzzle;
     }
 
-    List<String> getStrings() {
+    String[][] getStrings() {
         return strings;
+    }
+
+    TrieNode getPrefixTrie() {
+        return prefixTrie;
+    }
+
+    LinkedHashSet<String> getStringSet() {
+        return stringSet;
     }
 }
