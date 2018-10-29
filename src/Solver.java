@@ -1,7 +1,4 @@
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 class Solver {
@@ -19,23 +16,37 @@ class Solver {
         this.puzzle = puzzle;
         this.strings = strings;
         this.stringMap = strings.stream().collect(Collectors.groupingBy(String::length));
+        this.solution = copyPuzzle(this.puzzle);
+    }
+
+    private char[][] copyPuzzle(char[][] puzzle) {
+        char[][] result = new char[puzzleSize][puzzleSize];
+        for (int row = 0; row < puzzleSize; row++) {
+            for (int column = 0; column < puzzleSize; column++) {
+                if (puzzle[row][column] == '#') result[row][column] = '#';
+            }
+        }
+        return result;
     }
 
     boolean solve() {
-        solution = new char[puzzleSize][puzzleSize];
         Map<Coordinate, Information> wordInfo = new HashMap<>();
-
+        Stack<Coordinate> words = new Stack<>();
+        Coordinate currentWord = null;
         loops = 0;
-
         for (int row = 0; row < puzzleSize; row++) {
             int wordLength = 0;
             for (int column = 0; column <= puzzleSize; column++) {
                 if (column == puzzleSize || puzzle[row][column] == '#') {
                     loops++;
-                    if (column != puzzleSize) solution[row][column] = '#';
                     if (wordLength == 0) continue;
 
                     Coordinate coordinate = new Coordinate(row ,column);
+                    if (currentWord == null || !currentWord.equals(coordinate)) {
+                        if (currentWord != null) words.push(currentWord);
+                        currentWord = coordinate;
+                    }
+                    
                     Information info = wordInfo.get(coordinate);
                     if (info == null) {
                         info = new Information();
@@ -63,6 +74,7 @@ class Solver {
                     int offendingColumn = checkHorizontal(row + 1,
                             column - 1, wordLength);
                     if (offendingColumn != -1) {
+                        String temp = getSolutionAsString();
                         wordInfo.put(coordinate, info);
                         column--;
                         continue;
@@ -100,12 +112,24 @@ class Solver {
         return -1;
     }
 
-    public char[][] getSolution() {
+    char[][] getSolution() {
         return solution;
     }
 
-    public long getLoops() {
+    long getLoops() {
         return loops;
+    }
+
+    String getSolutionAsString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (char[] row : solution) {
+            for (int j = 0; j < solution.length; j++) {
+                stringBuilder.append(row[j] != 0 ? row[j] : '_');
+                if (j != solution.length - 1) stringBuilder.append(";");
+            }
+            stringBuilder.append("\n");
+        }
+        return stringBuilder.toString();
     }
 
     private class Coordinate {

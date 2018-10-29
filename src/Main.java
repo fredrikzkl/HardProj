@@ -28,6 +28,7 @@ public class Main {
             }
             else {
                 System.out.println("RIP");
+                System.out.println(solver.getSolutionAsString());
             }
             final long endTime = System.currentTimeMillis();
             System.out.println("Loops: " + solver.getLoops());
