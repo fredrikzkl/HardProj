@@ -1,28 +1,14 @@
-public class Helper {
+class Helper {
 
-    public static void printArray(char[] a){
-        System.out.println(arrayToString(a));
-    }
-
-    private static String arrayToString(char[] a){
-        String out = "";
-        for(int i = 0 ; i  < a.length ; i++){
-            out += a[i];
-            if(i != a.length-1) out += ", ";
-        }
-        return "[" + out + "]";
-    }
-
-    public static void printMatrix(char[][] m){
-        String out = "";
-        int n = m.length;
-        for(int x = 0 ; x < n ; x++){
-            char [] tempA = new char[n];
-            for(int y = 0 ; y < n ; y++){
-                tempA[y] = m[x][y];
+    static void printMatrix(char[][] m){
+        StringBuilder stringBuilder = new StringBuilder();
+        for (char[] row : m) {
+            for (int j = 0; j < m.length; j++) {
+                stringBuilder.append(row[j]);
+                if (j != m.length - 1) stringBuilder.append(";");
             }
-            out += arrayToString(tempA) + "\n";
+            stringBuilder.append("\n");
         }
-        System.out.println(out);
+        System.out.print(stringBuilder.toString());
     }
 }
