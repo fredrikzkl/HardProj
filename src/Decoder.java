@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 class Decoder {
     private int alphabetSize;
@@ -52,10 +53,10 @@ class Decoder {
             }
             sizes[i] = size;
         }
-
         for (int i = 0; i < puzzleSize; i++) {
             String[] newArray = new String[sizes[i]];
             System.arraycopy(strings[i], 0, newArray, 0, sizes[i]);
+            Collections.shuffle(Arrays.asList(newArray));
             strings[i] = newArray;
         }
         if (reader.readLine() != null) throw new IllegalArgumentException("Wrong number of strings");

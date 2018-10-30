@@ -11,7 +11,7 @@ public class LocalMain {
 
     public static void main(String [ ] args)
     {
-        String fileName = "2";
+        String fileName = "6";
 //        saveToFile(generateCPC(), fileName);
         runWithFile(fileName);
 //        runBenchmark();
@@ -28,8 +28,7 @@ public class LocalMain {
             final long endTimeD = System.currentTimeMillis();
             System.out.println("Decode: " + (endTimeD  - startTimeD));
             final long startTime = System.currentTimeMillis();
-            Solver solver = new Solver(input.getPuzzleSize(), input.getPuzzle(),
-                    input.getStrings(), input.getStringSet(), input.getPrefixTrie());
+            Solver solver = new Solver(input);
             final long endTime = System.currentTimeMillis();
             System.out.println("Construct Solver: " + (endTime - startTime));
             final long startTimeSolve = System.currentTimeMillis();
@@ -62,8 +61,7 @@ public class LocalMain {
                     Decoder input = new Decoder(fileReader);
                     final long decoderEndTime = System.currentTimeMillis();
                     final long solverStartTime = System.currentTimeMillis();
-                    Solver solver = new Solver(input.getPuzzleSize(), input.getPuzzle(),
-                            input.getStrings(), input.getStringSet(), input.getPrefixTrie());
+                    Solver solver = new Solver(input);
                     System.out.println("Solved: " + solver.solve());
                     final long solverEndTime = System.currentTimeMillis();
                     System.out.println("Decoder execution time: " + (decoderEndTime - decoderStartTime));

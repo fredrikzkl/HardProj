@@ -6,8 +6,7 @@ public class Main {
     {
         try{
             Decoder input = new Decoder(new InputStreamReader(System.in));
-            Solver solver = new Solver(input.getPuzzleSize(), input.getPuzzle(),
-                    input.getStrings(), input.getStringSet(), input.getPrefixTrie());
+            Solver solver = new Solver(input);
             if (solver.solve()) {
                 solver.printSolution();
             }
